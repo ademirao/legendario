@@ -15,4 +15,4 @@ handlers:
   upload: (.*).jpeg
 
 - url: /.*
-  script: dilmefiquese.py
+  script: legendario.py
