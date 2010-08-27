@@ -1,0 +1,77 @@
+body {
+  font-family: Helvetica,Arial,sans-serif;
+}
+
+#photos_panel {
+  text-align: center;
+  margin-left: 100px;
+  margin-top: 20px;
+  width: 810px;
+}
+
+img {
+ border: 2px solid #009900
+}
+
+#main_panel {
+  background-color: #dcf6db;
+  border: 1px solid #009900;
+  margin: 100px;
+  margin-top: 20px;
+  font-size: medium ;
+  width: 800px;
+}
+
+#error_panel{
+  margin: 10px;
+  padding: 5px;
+  background: #FFAAAA;
+  border: 1px solid #009900;
+  font-size: small
+}
+
+#label_list_container {
+  width: 100%
+}
+
+#label_list {
+  margin: 10px;
+  border: 2px dotted #009900;
+  height: 300px;
+  overflow: auto; 
+}
+
+.label_container {
+  height: 80px;
+  position: relative;
+  float: left;
+  padding: 4px;
+  margin: 3px;
+}
+
+.label {
+  border: 2px solid #009900
+  width: 33%
+  border: 1px solid;
+  vertical-align: middle;
+}
+
+.labelradio {
+}
+
+#photo_button{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.fileselect {
+  float: left;
+}
+.button {
+  text-align: right;
+}
+#sugestoes {
+  font-size: small;
+  text-align: right;
+  padding: 4px;
+}

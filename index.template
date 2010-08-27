@@ -1,50 +1,66 @@
 <html>
+<link rel="stylesheet" type="text/css" href="style.css" />
 <head>
 </head>
-<body style='font-family:Helvetica,Arial,sans-serif;'>
-
-<div style='text-align: center'>
+<body>
+<div id=photos_panel>
 {% if success_content %}
 Clique na sua foto para baixar:<br><br>
-<a  href='/photo?image_id={{success_content.image_id}}&image_db=ImageDb'
-target=#blank> <img  style='border: 2px solid #000000;'
-src='/photo?image_id={{success_content.image_id}}&image_db=ImageDb' width=200px></img></a>
-{% else %} <center>
-
+<a  href='/photo?image_id={{success_content.image_id}}&image_db=ImageDb' target=#blank>
+  <img 
+    src='/photo?image_id={{success_content.image_id}}&image_db=ImageDb' width=200px></img>
+</a>
+{% else %}
+<center>
 <table>
-<tr><td>
-<img  style='border: 2px solid #000000;' src='/antes.jpeg' width=100px></img>
-</td><td style='font-size: 40px' >+</td><td><img  style='border: 2px solid #000000;'
-src='/label_example.jpeg' width=200px></td><td style='font-size: 40px'> = </td><td>
-<img  style='border: 2px solid #000000;' src='/depois.jpeg'
-width=100px></img></td>
+  <tr>
+   <td>
+    <img  src='/label_example.jpeg' width=130px></img>
+   </td>
+   <td style='font-size: 40px' >+</td>
+   <td>
+    <img src='/antes.jpeg' width=70px>
+   </td>
+   <td style='font-size: 40px'>=</td>
+   <td>
+   <img src='/depois.jpeg' width=70px></img>
+   </td>
 </tr>
-</table></center>{% endif %}
-</div>
-<div style='background-color: #dcf6db; border: 1px solid #009900; padding: 10px; margin: 100px; margin-top: 20px; font-size:large' >
-{% if error_message %}
-<div style="margin: 10px; padding: 5px; background: #FFAAAA; border: 1px solid #009900; font-size:small "><b> {{ error_message }} </b> </div> 
+</table>
+</center>
 {% endif %}
+</div> <!-- /photos_panel -->
 
-<form action="/dilmefiqueme" method="post"  enctype="multipart/form-data">
-<div>1) Selecione uma foto sua (< 1MB; png, jpg ou
-gif): <input type='file' name="source_image" size='30'/> </div>
-<div style='margin-bottom: 10px'>2) Selecione uma legenda:
-  <table border=0>
-    {% for label in labels%}
-      <tr>
-        <td><input type=radio name='label_name' value='{{label.id}}'>
-        </input></td><td>
-        <img style='border: 2px solid #009900' src='/photo?image_id={{label.id}}&image_db=LabelsDb' width=200></a>
-        </td>
-    {% endfor %}
-   </table>
-</div>
-<div style='margin-top: 20px'>3) Adicione a legenda a minha foto: <input
-style='font-size: huge' type="submit" value="Pronto!"></div>
-</form>
-<div style='font-size:small; text-align: right'>Reclamacoes, sugestoes e contribuicoes: <a
-href=mailto:ademirao@gmail.com>ademirao@gmail.com</a></div>
+<div id=main_panel >
+  {% if error_message %}
+  <div id=error_panel><b> {{ error_message }} </b> </div> 
+  {% endif %}
+  <form action="/dilmefiqueme" method="post"  enctype="multipart/form-data">
+    <div id=label_list>
+     {% for label in labels%}
+      <div class=label_container>
+        <input class=labelradio type=radio id='{{label.id}}' 
+        name='label_name' value='{{label.id}}'>
+        </input>
+        <label for='{{label.id}}'>
+        <img class=label src='/photo?image_id={{label.id}}&image_db=LabelsDb'
+        width=200></img></label>
+      </div>
+     {% endfor %}
+    </div>
+
+ <div id=photo_button>
+  <div class=fileselect>
+  Selecione sua foto: <input type='file' name="source_image" size='32'/>
+  </div>
+  <div class=button>
+  <input type="image" width=70px  src='/button.jpeg' value="Pronto!"/>
+  </div>
+  </div>
+ </form>
+ <div id=sugestoes>Reclamacoes, sugestoes e contribuicoes: <a
+ href=mailto:ademirao@gmail.com>ademirao@gmail.com</a></div>
+ </div>
 </div>
 </body>
 </html>

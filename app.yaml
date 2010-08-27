@@ -1,4 +1,4 @@
-application: dilmefiquese
+application: legenda-me
 version: 1
 runtime: python
 api_version: 1
@@ -10,9 +10,9 @@ handlers:
   secure: always
   login: admin
 
-- url: /(.*)\.jpeg
-  static_files: \1.jpeg
-  upload: (.*).jpeg
+- url: /(.*)\.(jpeg|css)
+  static_files: \1.\2
+  upload: (.*).(jpeg|css)
 
 - url: /.*
   script: legendario.py

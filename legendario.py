@@ -103,7 +103,7 @@ def getImageTypeFromContentType(content_type):
   return None
 
 # Handler that adds a label to the user photo.
-class Dilmeficator(webapp.RequestHandler):
+class Legendario(webapp.RequestHandler):
   def post(self):
     self.response.headers['Content-Type'] = 'text/html'
     uploaded_image = self.request.POST['source_image']
@@ -217,7 +217,7 @@ class AddLabel(webapp.RequestHandler):
 application = webapp.WSGIApplication(
                                      [('/', MainPage),
                                       ('/add_label', AddLabel),
-                                      ('/dilmefiqueme', Dilmeficator),
+                                      ('/dilmefiqueme', Legendario),
                                       ('/photo', GetPhoto)], debug=True)
 
 def main():
