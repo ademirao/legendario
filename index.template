@@ -5,11 +5,19 @@
 <body>
 <div id=photos_panel>
 {% if success_content %}
-Clique na sua foto para baixar:<br><br>
-<a  href='/photo?image_id={{success_content.image_id}}&image_db=ImageDb' target=#blank>
-  <img 
-    src='/photo?image_id={{success_content.image_id}}&image_db=ImageDb' width=200px></img>
-</a>
+Clique em sua foto para baixar: 
+<table id=images_list><tr>
+{% for image in success_content.images%}
+  <td>
+  <div class=image_container>
+  <span class=photo_descr>{{image.image_descr }}</span><br>
+  <a  href='/photo?image_id={{image.image_id}}&image_db=ImageDb' target=#blank>
+   <img src='/photo?image_id={{image.image_id}}&image_db=ImageDb'
+   width=200px></img>
+  </a></div>
+  </td>
+{% endfor %} </tr>
+</table>
 {% else %}
 <center>
 <table>
@@ -35,7 +43,7 @@ Clique na sua foto para baixar:<br><br>
   {% if error_message %}
   <div id=error_panel><b> {{ error_message }} </b> </div> 
   {% endif %}
-  <form action="/dilmefiqueme" method="post"  enctype="multipart/form-data">
+  <form action="/legendame" method="post"  enctype="multipart/form-data">
     <div id=label_list>
      {% for label in labels%}
       <div class=label_container>
@@ -44,7 +52,7 @@ Clique na sua foto para baixar:<br><br>
         </input>
         <label for='{{label.id}}'>
         <img class=label src='/photo?image_id={{label.id}}&image_db=LabelsDb'
-        width=200></img></label>
+        width=200px></img></label>
       </div>
      {% endfor %}
     </div>

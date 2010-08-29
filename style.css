@@ -5,12 +5,25 @@ body {
 #photos_panel {
   text-align: center;
   margin-left: 100px;
-  margin-top: 20px;
+  margin-top: 21px;
   width: 810px;
 }
 
 img {
  border: 2px solid #009900
+}
+
+#images_list {
+  width: 100%;
+  padding: 20px;
+}
+
+.image_container {
+  font-size: small;
+  background-color: #009900;
+  color: #ffffff; 
+  text-align: center;
+  width: 205px;
 }
 
 #main_panel {
@@ -51,7 +64,6 @@ img {
 
 .label {
   border: 2px solid #009900
-  width: 33%
   border: 1px solid;
   vertical-align: middle;
 }

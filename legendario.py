@@ -10,6 +10,9 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
+KEY_RANGE = range(random.randint(24,32))
+KEY_CHARS = string.ascii_letters;
+
 # Database containing all labels to be appended to the user's photo. The label
 # id must be called image_id so that DbFunctions can work on both Labels and
 # ImageDB.
@@ -40,6 +43,18 @@ class DbFunctions:
   def getImages(self, database):
     imageDb = db.GqlQuery('SELECT * FROM %s ORDER BY image_id ASC' % database)
     return imageDb
+
+  def addImage(self, image_content, image_type = 'image/jpeg', key = None):
+    if key == None:
+      key = (''.join(random.choice(KEY_CHARS) for x in KEY_RANGE))
+    imageDb = ImageDb()
+    imageDb.image_id = key
+    imageDb.image_type = "image/jpeg"
+    imageDb.content = db.Blob(image_content) 
+    imageDb.put();
+    return key;
+
+
 
 # Serves photos given ids and the database to read from
 class GetPhoto(webapp.RequestHandler):
@@ -162,29 +177,60 @@ class Legendario(webapp.RequestHandler):
       image = images.Image(image.execute_transforms(image_type))
 
     # now images have the same width. Height will never exceed the 4000 limit.
-    result = images.composite([(image, 0, 0, 1.0, images.TOP_RIGHT),
+    no_crop_image = images.composite([(image, 0, 0, 1.0, images.TOP_RIGHT),
                                (label_img, 0, image.height, 1.0,
                                 images.TOP_RIGHT) ], image.width,
-                               image.height + label_img.height,
+                               image.height + label_img.height, 0,
                                images.JPEG)
 
+    crop_image = images.composite([(image, 0, 0, 1.0, images.TOP_RIGHT),
+                               (label_img, 0, image.height - label_img.height, 1.0,
+                                images.TOP_RIGHT) ], image.width,
+                               image.height, 0, images.JPEG)
+
+    squared_width = image.width;
+    squared_height = image.height + label_img.height;
+
+    if (squared_width > squared_height): squared_height = squared_width
+    else: squared_width = squared_height
+
+    woffset = (squared_width - image.width) / 2
+    squared_xpos = -1 * woffset;
+    hoffset = (squared_height - (image.height + label_img.height))/2
+    squared_ypos = hoffset
+
+    squared_image  = images.composite(inputs=[(image, squared_xpos , hoffset, 1.0, images.TOP_RIGHT),
+                               (label_img, squared_xpos, image.height + hoffset, 1.0,
+                                images.TOP_RIGHT) ], width=squared_width,
+                                height=squared_height, color=0xffffffff,
+                                output_encoding=images.JPEG)
+
+    results = [ no_crop_image, crop_image,  squared_image ]
     # Due to some weird behaviour of the transformation library, it may be the
     # case that the result is bigger than the len(label_img) + len(image). Why,
     # why, why??
-    if len(result) > (1 << 20):
-      self.response.out.write(RenderMainPage(error_message='''Sua imagem ficou
-      muito grande depois de acrescentar a legenda. Reduza o tamanho da sua
-      imagem original. Se isso nao resolver, tente reduzir suas dimensoes ou
-      sua resolucao. Se nada funcionar, mande um email para ademirao@gmail.com'''))
-      return;
+    for result in results:
+      if len(result) > (1 << 20):
+        self.response.out.write(RenderMainPage(error_message='''Sua imagem ficou
+        muito grande depois de acrescentar a legenda. Reduza o tamanho da sua
+        imagem original. Se isso nao resolver, tente reduzir suas dimensoes ou
+        sua resolucao. Se nada funcionar, mande um email para ademirao@gmail.com'''))
+        return;
 
-    key_range = range(random.randint(24,32))
-    key_chars = string.ascii_letters;
-    imageDb.image_id = (''.join(random.choice(key_chars) for x in key_range))
-    imageDb.image_type = "image/jpeg"
-    imageDb.content = db.Blob(result) 
-    imageDb.put();
-    self.response.out.write(RenderMainPage({ 'image_id': imageDb.image_id }))
+    no_crop_image_key = DbFunctions().addImage(no_crop_image)
+    crop_image_key = DbFunctions().addImage(crop_image)
+    squared_image_key  = DbFunctions().addImage(squared_image)
+    self.response.out.write(RenderMainPage({ 
+      'images': [ { 
+        'image_id': no_crop_image_key,
+        'image_descr': 'Sem Cortes',
+        }, {
+        'image_id': crop_image_key,
+        'image_descr': 'Cortada',
+        }, {
+        'image_id': squared_image_key,
+        'image_descr': 'Quadrada Sem Cortes'
+        }] }))
 
 class AddLabel(webapp.RequestHandler):
   def post(self):
@@ -214,10 +260,11 @@ class AddLabel(webapp.RequestHandler):
     labelDb.put();
     self.response.out.write('Label added! Name %s' % labelDb.image_id)
 
+
 application = webapp.WSGIApplication(
                                      [('/', MainPage),
                                       ('/add_label', AddLabel),
-                                      ('/dilmefiqueme', Legendario),
+                                      ('/legendame', Legendario),
                                       ('/photo', GetPhoto)], debug=True)
 
 def main():
