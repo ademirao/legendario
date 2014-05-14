@@ -28,9 +28,12 @@ Clique em sua foto para baixar:
   {% endif %}
  <div >
  <form action="/legendame" method="post" enctype="multipart/form-data">
+  <div class=fileselect>
   Selecione uma foto do seu computador:
-    <br> <input type='file' name="source_image" size='32'/>
-  2 - Escolha um dos labels:
+  <br><br> <input type='file' name="source_image" size='32'/>
+  </div>
+  <div class=fileselect>
+  Escolha uma legenda:<br><br>
     <div id=label_list>
      {% for label in labels%}
       <div class=label_container>
@@ -39,16 +42,23 @@ Clique em sua foto para baixar:
         </input>
         <label for='{{label.id}}'>
         <img class=label src='/photo?image_id={{label.id}}&image_db=LabelsDb'
-        width=200px></img></label>
+        width=150px></img></label>
       </div>
      {% endfor %}
     </div>
+  </div>
   
-  3 - <input type="submit" width=70px  src='/button.jpeg' value="Legenda-me!"/> para legendar sua foto.
+  <div class=fileselect>
+  Clique para legendar:<br><br>
+  <input type="image" src='/button.jpeg' value="Legenda-me!"/>
+  </div>
  </form>
- <div id=sugestoes>Reclamações, sugestões e contribuições: <a
- href=mailto:ademirao@gmail.com>ademirao@gmail.com</a></div>
- </div>
 </div>
+ </div>
+<br>
+<br>
+ Contato: <a href=mailto:ademirao@gmail.com>ademirao@gmail.com</a>
+
+
 </body>
 </html>
