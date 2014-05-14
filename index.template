@@ -18,32 +18,19 @@ Clique em sua foto para baixar:
   </td>
 {% endfor %} </tr>
 </table>
-{% else %}
-<center>
-<table>
-  <tr>
-   <td>
-    <img  src='/label_example.jpeg' width=130px></img>
-   </td>
-   <td style='font-size: 40px' >+</td>
-   <td>
-    <img src='/antes.jpeg' width=70px>
-   </td>
-   <td style='font-size: 40px'>=</td>
-   <td>
-   <img src='/depois.jpeg' width=70px></img>
-   </td>
-</tr>
-</table>
-</center>
 {% endif %}
 </div> <!-- /photos_panel -->
 
 <div id=main_panel >
+
   {% if error_message %}
   <div id=error_panel><b> {{ error_message }} </b> </div> 
   {% endif %}
-  <form action="/legendame" method="post"  enctype="multipart/form-data">
+ <div >
+ <form action="/legendame" method="post" enctype="multipart/form-data">
+  Selecione uma foto do seu computador:
+    <br> <input type='file' name="source_image" size='32'/>
+  2 - Escolha um dos labels:
     <div id=label_list>
      {% for label in labels%}
       <div class=label_container>
@@ -56,17 +43,10 @@ Clique em sua foto para baixar:
       </div>
      {% endfor %}
     </div>
-
- <div id=photo_button>
-  <div class=fileselect>
-  Selecione sua foto: <input type='file' name="source_image" size='32'/>
-  </div>
-  <div class=button>
-  <input type="image" width=70px  src='/button.jpeg' value="Pronto!"/>
-  </div>
-  </div>
+  
+  3 - <input type="submit" width=70px  src='/button.jpeg' value="Legenda-me!"/> para legendar sua foto.
  </form>
- <div id=sugestoes>Reclamacoes, sugestoes e contribuicoes: <a
+ <div id=sugestoes>Reclamações, sugestões e contribuições: <a
  href=mailto:ademirao@gmail.com>ademirao@gmail.com</a></div>
  </div>
 </div>
